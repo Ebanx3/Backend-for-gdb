@@ -33,12 +33,12 @@ const signup = async (req: Request, res: Response) => {
         if (!password || !email) return res.status(400).json({ success: false, message: 'Must have password and email fields' })
 
 
-        const response = await userConnection.getElement("users", { email });
+        const response = await userConnection.getElement("users", { email: email.toLowerCase() });
         if (response) return res.status(400).json({ success: false, message: "email already used" });
 
         const hashedPassword = await hash(password, 10);
 
-        userConnection.addELement("users", { email, password: hashedPassword });
+        userConnection.addELement("users", { email: email.toLowerCase(), password: hashedPassword });
 
         res.status(200).json({ success: true })
     }
