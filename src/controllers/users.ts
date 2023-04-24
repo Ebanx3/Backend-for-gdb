@@ -11,7 +11,7 @@ const login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ success: false, message: 'Must have email and password fields' })
 
-        const response: any = await userConnection.getElement("users", { email });
+        const response: any = await userConnection.getElement("users", { email: email.toLowerCase() });
         if (!response) return res.status(400).json({ success: false, message: "invalid email or password" });
 
         const samePass = await compare(password, response.password);
