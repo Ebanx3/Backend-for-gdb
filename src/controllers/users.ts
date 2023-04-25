@@ -57,9 +57,9 @@ const isValidToken = async (req: Request, res: Response) => {
         const email: string = tokenData.email
         res.status(200).json({ success: true, data: email })
     }
-    catch (err) {
+    catch (err: any) {
         console.log(err);
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false, error: err.message })
     }
 }
 
