@@ -3,6 +3,7 @@ import ConnectDB from "../services/db";
 import { hash, compare } from "bcrypt"
 import config from "../config";
 import { generateAuthToken } from "../services/auth";
+import { verify } from "jsonwebtoken";
 
 export const userConnection = new ConnectDB(config.URL_DB || "", "gdbUsers");
 
@@ -48,4 +49,18 @@ const signup = async (req: Request, res: Response) => {
     }
 }
 
-export { login, signup }
+const isValidToken = async (req: Request, res: Response) => {
+    try {
+        const tokenAuth = req.get("token-auth")
+        if (!tokenAuth) return res.status(400).json({ success: false, message: "Headers must have a token" })
+        const tokenData: any = verify(tokenAuth!, process.env.TOKEN_SECRET_KEY!)
+        const email: string = tokenData.email
+        res.status(200).json({ success: true, data: email })
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false })
+    }
+}
+
+export { login, signup, isValidToken }
