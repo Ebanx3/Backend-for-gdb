@@ -7,7 +7,8 @@ const addDB = async (req: Request, res: Response) => {
     const tokenAuth = req.get("token-auth")
     const tokenData: any = verify(tokenAuth!, process.env.TOKEN_SECRET_KEY!)
     const email: string = tokenData.email
-    const { url_db, dbName } = req.body;
+    const { url_db } = req.body;
+    const dbName = email.split("@")[0]
     if (!url_db || !dbName) return res.status(400).json({ success: false, message: "body must have url_db string" })
 
     try {
