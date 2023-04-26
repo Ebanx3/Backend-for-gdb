@@ -23,7 +23,7 @@ const addDB = async (req: Request, res: Response) => {
     }
     catch (err: any) {
 
-        return res.status(400).json({ success: false, message: "invalid string url database", error: err.message })
+        return res.status(400).json({ success: false, message: "invalid string url database", error: err.message, errorCode: err.code })
     }
 }
 
