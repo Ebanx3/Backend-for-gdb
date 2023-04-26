@@ -9,15 +9,21 @@ const addDB = async (req: Request, res: Response) => {
     const email: string = tokenData.email
     const { url_db } = req.body;
     const dbName = email.split("@")[0]
-    if (!url_db || !dbName) return res.status(400).json({ success: false, message: "body must have url_db string" })
+    if (!url_db) return res.status(400).json({ success: false, message: "body must have url_db string" })
 
     try {
         await userConnection.updateElement("users", { email }, { url_db, dbName })
+
+        //test connection string
+        const connection = new ConnectDB(url_db, dbName);
+
+        await connection.getElements("")
+
         return res.status(200).json({ success: true, message: "connected to db" })
     }
-    catch (err) {
-        console.log(err)
-        return res.status(400).json({ success: false, message: "invalid string url database" })
+    catch (err: any) {
+
+        return res.status(400).json({ success: false, message: "invalid string url database", error: err.message })
     }
 }
 
